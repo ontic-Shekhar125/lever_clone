@@ -31,6 +31,13 @@ app.get("/", (req, res) => {
 app.get("/jobs", (req, res) => {
   res.sendFile(path.join(__dirname, "/jobs.html"));
 });
+
+app.get("/header.js", (req, res) => {
+  res.sendFile(path.join(__dirname, "/header.js"));
+});
+app.get("/jobRef.js", (req, res) => {
+  res.sendFile(path.join(__dirname, "/jobRef.js"));
+});
 app.get("/referalForm", (req, res) => {
   res.sendFile(path.join(__dirname, "/referalForm.html"));
 });
@@ -39,6 +46,11 @@ app.get("/jobsdata", async (req, res) => {
   res.json(jobsdata);
 });
 
+app.get("/jobRoles", async (req, res) => {
+  const jobRoles = await Job.distinct('role');
+  console.log(jobRoles);
+  res.json(jobRoles);
+});
 app.delete("/jobs/delete/:id", async (req, res) => {
   try {
     const result = await Job.findByIdAndDelete(req.params.id);
