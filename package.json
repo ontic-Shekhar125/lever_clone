@@ -19,6 +19,7 @@
   "homepage": "https://github.com/shekhar1255/lever_clone#readme",
   "description": "",
   "dependencies": {
+    "ejs": "^3.1.10",
     "express": "^4.21.2",
     "lever_clone": "file:",
     "mongoose": "^8.10.0",
