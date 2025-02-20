@@ -184,6 +184,11 @@ app.post("/feedback/:id", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+app.get("/emHomepage", async (req, res) => {
+  res.render("emHomepage",{flag:0 , index:0});
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
 });
