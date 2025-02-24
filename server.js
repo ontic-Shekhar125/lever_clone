@@ -8,7 +8,14 @@ const Interview = require(path.join(__dirname, "./models/Interview"));
 const Feedback = require(path.join(__dirname,"./models/Feedback")); // Ensure correct path
 app.use(express.json()); //
 app.use(express.urlencoded({ extended: true })); 
+const Employee = require(path.join(__dirname,"./models/Employee")); // Ensure correct path
+const Candidate = require(path.join(__dirname,"./models/Candidate")); // Ensure correct path
 
+function getjobheaders()
+{
+  const excludes=['_id','__v'];
+  return Object.keys(Job.schema.paths).filter((item)=>!excludes.includes(item));
+}
 // Set EJS as the view engine
 app.set("view engine", "ejs");
 
@@ -17,13 +24,22 @@ app.set("views", path.join(__dirname, "views"));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "public")));
-
+const referrer = {
+  _id: "67bb01f9afa26cbd5f3ba086",
+  name: "Bob Smith",
+  email: "bob.smith@example.com",
+  phone: "+1 876-543-2109",
+  department: "Engineering",
+  designation: "Software Engineer",
+  location: "Noida",
+};
 
 mongoose
   .connect("mongodb://localhost:27017/randomeee")
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+  
   app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/index.html"));
 });
@@ -31,16 +47,139 @@ app.get("/jobs", (req, res) => {
   res.sendFile(path.join(__dirname, "/jobs.html"));
 });
 
+app.get("/jobs", (req, res) => {
+  res.sendFile(path.join(__dirname, "/jobs.html"));
+});
+app.get("/adjobs", (req, res) => {
+  res.render("adjobs",{flag:1,index:2});
+});
 
+app.get("/editjobs/:id", async (req, res) => {
+  
+  const headers=getjobheaders();
+  try {
+    const jobId = req.params.id;
 
+    // Convert jobId to a MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(jobId)) {
+        return res.status(400).send("Invalid Job ID");
+    }
+
+    const jobdata = await Job.findById(new mongoose.Types.ObjectId(jobId));
+
+    if (!jobdata) {
+        return res.status(404).send("Job not found");
+    }
+
+    res.render("editjobs",{headers,flag:1,index:2,data:jobdata});
+  } catch (error) {
+    console.error("Error fetching job:", error);
+    res.status(500).send("Internal Server Error");
+}
+  res.render("editjobs",{headers,flag:1,index:2,data:1});
+});
+app.get("/createjob", async (req, res) => {
+  const excludes=['_id','__v'];
+  const headers=Object.keys(Job.schema.paths).filter((item)=>!excludes.includes(item));
+  res.render("createjob",{headers,flag:1,index:2});
+});
+app.post("/createjob", async (req, res) => {
+  try {
+      const { admin, role, department, locationType, workType, location } = req.body;
+
+      // Validate required fields
+      if (!admin || !role || !department || !locationType || !workType || !location) {
+          return res.status(400).json({ error: "All fields are required" });
+      }
+
+      // Create and save job in database
+      const newJob = new Job({
+          admin,
+          role,
+          department,
+          locationType,
+          workType,
+          location,
+      });
+
+      await newJob.save();
+      res.status(201).json({ message: "Job created successfully", job: newJob });
+
+  } catch (error) {
+      console.error("Error creating job:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 app.get("/referalForm", (req, res) => {
-  res.sendFile(path.join(__dirname, "/referalForm.html"));
+  res.render("referalForm",{flag:0,index:1,flag2:0,jobdata:undefined});
+});
+app.post("/referalForm", async (req, res) => {
+  try {
+    const {
+      name,
+      email,
+      phone,
+      current_location,
+      current_company,
+      relationship_with_referrer,
+      referred_jobs,
+      referrer_id, // Assuming referrer ID is sent from the frontend
+    } = req.body;
+
+    // Ensure referred_jobs is an array (it may come as a single value)
+    const jobsArray = Array.isArray(referred_jobs) ? referred_jobs : [referred_jobs];
+
+    // Create new candidate entry
+    const newCandidate = new Candidate({
+      name,
+      email,
+      phone,
+      current_location,
+      current_company,
+      relationship_with_referrer,
+      referred_jobs: jobsArray,
+      referred_by: referrer_id, // Assign referrer ID
+    });
+
+    await newCandidate.save();
+
+    // Redirect the user to the /emjobs page
+    res.redirect("/emjobs");
+  } catch (error) {
+    console.error("Error saving candidate:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/referalForm/:id", async (req, res) => {
+  try {
+      const jobId = req.params.id;
+
+      // Convert jobId to a MongoDB ObjectId
+      if (!mongoose.Types.ObjectId.isValid(jobId)) {
+          return res.status(400).send("Invalid Job ID");
+      }
+
+      const jobdata = await Job.findById(new mongoose.Types.ObjectId(jobId));
+
+      if (!jobdata) {
+          return res.status(404).send("Job not found");
+      }
+
+      res.render("referalForm", { jobdata, flag: 0, index: 1,flag2:1 });
+  } catch (error) {
+      console.error("Error fetching job:", error);
+      res.status(500).send("Internal Server Error");
+  }
 });
 app.get("/jobsdata", async (req, res) => {
   const jobsdata = await Job.find({}).select("-__v");
   res.json(jobsdata);
 });
+app.get("/emjobs", async (req, res) => {
+  res.render("emjobs", { flag:0 , index:2});
 
+});
 app.get("/jobRoles", async (req, res) => {
   const jobRoles = await Job.distinct("role");
   console.log(jobRoles);
@@ -186,7 +325,22 @@ app.post("/feedback/:id", async (req, res) => {
 });
 
 app.get("/emHomepage", async (req, res) => {
-  res.render("emHomepage",{flag:0 , index:0});
+  const currentTimeUTC = new Date(); // Get current UTC time
+
+  // Fetch upcoming interviews with date greater than current UTC time
+  const upcomingInterviews = await Interview.find({
+    date: { $gt: currentTimeUTC },
+  }).lean(); // `lean()` makes it return plain JS objects
+
+  console.log("Current UTC Time:", currentTimeUTC);
+  console.log("Upcoming Interviews:", upcomingInterviews);
+
+  const allFields = Object.keys(upcomingInterviews[0]);
+  const excludeFields = ["_id", "feedback_id", "interviewer_email", "duration", "updatedAt", "round","status"];
+  const headers = allFields.filter((field) => !excludeFields.includes(field));
+
+  res.render("emHomepage", { flag:0 , index:0,interviews: upcomingInterviews, headers:headers });
+  // res.render(,{flag:0 , index:0});
 });
 
 app.listen(port, () => {

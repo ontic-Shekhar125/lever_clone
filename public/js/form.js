@@ -1,3 +1,4 @@
+
 const formConfig = {
 
     recommendation: {
@@ -19,6 +20,26 @@ const formConfig = {
             formSpan.setAttribute('data-value',"Candidate Email");
             return formSpan;
         }
+      },
+      workType:
+      {
+        formatter: () =>  { 
+            const options=["Full-time", "Contract", "Part-time"];
+            const formdropdown=document.createElement('form-dropdown');
+            formdropdown.setAttribute('data-options',options);
+            formdropdown.setAttribute('data-value',"workType");
+            return formdropdown;
+        }
+      },
+      locationType:
+      {
+        formatter: () =>  { 
+            const options=["Remote", "On-site", "Hybrid"];
+            const formdropdown=document.createElement('form-dropdown');
+            formdropdown.setAttribute('data-options',options);
+            formdropdown.setAttribute('data-value',"locationType");
+            return formdropdown;
+        }
       }
 
   };
@@ -38,9 +59,15 @@ class wholeForm extends HTMLElement {
         this.innerHTML=`
             <form method="POST"  class="formclass"></form>
         `;
-
-        this.createform(headers,interview);
+        const data=this.getAttribute("data-insert");
+        this.createform(headers,interview,data);
         
+        if(data)
+        {
+            this.populateForm(JSON.parse(data));
+        }
+
+
     }
     insertbutton(form)
     {
@@ -49,7 +76,7 @@ class wholeForm extends HTMLElement {
         
         
     }
-    createform(headers,interview)
+    createform(headers,interview,data)
     {
         const form=document.querySelector('.formclass');
         headers.forEach((header)=>{
@@ -59,11 +86,28 @@ class wholeForm extends HTMLElement {
             } else {
                 const formele=document.createElement('form-ele');
                 formele.setAttribute('data-value',header);
+                if(data)
+                {
+                    console.log(data);
+                    formele.value=data[header];
+                }
                 form.appendChild(formele);
             }
         });
         this.insertbutton(form);
 
+
+    }
+     populateForm(data) {
+        
+        for (let key in data) {
+            const field = document.querySelector(`[name='${key}']`);
+            
+            if (field) {
+                field.value = data[key]; 
+               // Set value for both text inputs and selects
+            }
+        }
     }
 }
 

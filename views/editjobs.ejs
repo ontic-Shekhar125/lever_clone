@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Form</title>
+  <script src="https://unpkg.com/@tailwindcss/browser@4" ></script>
+  <script src="/js/heading.js" defer></script> <!-- Link to your custom elements JS file -->
+  <script src="/js/formElement.js" defer></script> <!-- Link to your custom elements JS file -->
+  <script src="/js/formDropdown.js" defer></script> <!-- Link to your custom elements JS file -->
+  <script src="/js/formSpan.js" defer></script> <!-- Link to your custom elements JS file -->
+  <script src="/js/formButton.js" defer></script> <!-- Link to your custom elements JS file -->
+  <script src="/js/navbar.js" defer></script> 
+  <script src="/js/navElement.js" defer></script> 
+  <custom-nav data-flag='<%- flag %>' data-index='<%- index %>'></custom-nav>
+
+  <script src="/js/form.js" defer></script> <!-- Link to your custom elements JS file -->
+
+
+
+</head>
+<body>
+  <div class="mt-8 mr-100 ml-100 flex-col items-center">
+    <custom-heading data-value="Edit Job"></custom-heading>
+    <whole-form  data-headers='<%- JSON.stringify(headers) %>' data-insert='<%- JSON.stringify(data) %>'></whole-form>
+  </div>
+
+</body>
+</html>

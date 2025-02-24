@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jobs</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    
+    <script src="/js/heading.js" defer></script> <!-- Link to your custom elements JS file -->
+
+    <script src="/js/jobRef.js"></script>
+    <script src="/js/navbar.js" defer></script> 
+    <script src="/js/navElement.js" defer></script> 
+   
+  </head>
+  <body>
+    <custom-nav data-flag='<%- flag %>' data-index='<%- index %>'></custom-nav>
+
+
+    <div class="mt-8 mr-100 ml-100 flex-col justify-center items-center">
+
+      <custom-heading data-value="Refer a Candidate"></custom-heading> 
+
+      <div>
+        <form action="/referalForm" method="POST" class="referralForm">
+          <div class="relative mb-6">
+            <label class="flex items-center mb-2 text-sm font-semibold text-gray-900 capitalize">
+                Refer for Job(s)
+            </label>
+            <p class="text-gray-600 text-sm mb-2">Submit a candidate for  jobs</p>
+            <div class="jobDropdownclass">
+              <button id="addJobBtn" type="button" class="w-32 h-10 bg-indigo-600 text-white rounded-full text-sm font-semibold hover:bg-indigo-800 transition-all duration-500">
+                + Add Job
+                   </button>
+            </div>
+
+
+            
+            <!-- Selected Jobs Display -->
+            <div id="selectedJobs" class="mt-3 flex flex-wrap gap-2"></div>
+        </div>
+                    <div class="relative mb-6">
+                    <label class="flex  items-center mb-2 text-sm leading-6 font-semibold text-gray-900 capitalize">Full Name <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z" fill="#EF4444" />
+                    </svg>
+                    </label>
+                    <input name="name" type="text" id="default-search" class=" text-sm leading-6 font-semibold text-gray-900 capitalize block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none " placeholder="Name..." required="">
+                    </div>
+            <div class="relative mb-6">
+             <label class=" text-sm leading-6 font-semibold text-gray-900 capitalize flex  items-center mb-2 text-gray-600 text-sm font-medium">Email <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z" fill="#EF4444" />
+               </svg>
+             </label>
+             <input name="email" type="text" id="default-search" class="text-sm leading-6 font-semibold text-gray-900 capitalize block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none " placeholder="Email address..." required="">
+            </div>
+            <div class="relative mb-6">
+             <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Current Location <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z" fill="#EF4444" />
+               </svg>
+             </label>
+             <input name="current_location" type="text" id="default-search" class="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none " placeholder="Location..." required="">
+            </div>
+            <div class="relative mb-6">
+             <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Current Company <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z" fill="#EF4444" />
+               </svg>
+             </label>
+             <input name="current_company" type="text" id="default-search" class="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none " placeholder="**********" required="">
+            </div>
+            <div class="relative mb-6">
+             <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Phone <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z" fill="#EF4444" />
+               </svg>
+             </label>
+             <input name="phone" type="text" id="default-search" class="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "  required="">
+            </div>
+            <div class="relative mb-6">
+              <label class="text-sm leading-6 font-semibold text-gray-900 capitalize flex items-center mb-2 text-gray-600 text-sm font-medium">
+                Resume 
+                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z" fill="#EF4444" />
+                </svg>
+              </label>
+              <input type="file" id="resume-upload" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-full cursor-pointer bg-white shadow-xs focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200" accept=".pdf,.doc,.docx" required>
+            </div>
+            <div class="relative mb-6">
+                <label class="text-sm leading-6 font-semibold text-gray-900 capitalize flex items-center mb-2 text-gray-600 text-sm font-medium">
+                  Relationship
+                  <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z" fill="#EF4444" />
+                  </svg>
+                </label>
+                <select name="relationship_with_referrer" class="jobDropdown mt-4 text-sm leading-6 font-semibold text-gray-900 capitalize block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none ">
+                    <option value="" disabled selected >Select One</option>
+                    <option value="" >Former colleague</option>
+                    <option value="" >Friend</option>
+                    <option value="" >Reputation</option>
+                    <option value="" > Other</option>
+
+
+                    
+                </select>             
+             </div>
+            <button class="type='submit' w-52 h-12 shadow-sm rounded-full bg-indigo-600 hover:bg-indigo-800 transition-all duration-700 text-white text-base font-semibold leading-7">Submit Referral</button>
+            </form>
+      </div>
+    </div>
+  </body>
+  
+  <script>
+        const referralForm=document.querySelector('.referralForm');
+    const addJobButton=document.querySelector('#addJobBtn');
+    const jobDropdownclass=document.querySelector('.jobDropdownclass');
+    let isChangeEventHandled = false;
+        function getdropdownvalues(alldropdowns)
+    {
+      let cur=[];
+
+      for(let dropdown of alldropdowns)
+      {
+        
+        const val=dropdown.value;
+      
+       
+        if(val!=="")
+        cur.push(val);
+
+        
+        
+      }
+      
+      return cur;
+    }
+
+    async function getroles()
+    {
+      let url="http://localhost:3000/jobRoles";
+      let response= await fetch(url);
+      return response.json();
+    }
+    let jobRoles;
+    let availableroles;
+    (async function (){
+      jobRoles=await getroles();
+      availableroles=Array.from(jobRoles);
+// Parse jobdata safely
+const flag2= + '<%- flag2 %>';
+console.log(flag2);
+if(flag2)
+{
+    
+    let jobdata;
+try {
+    jobdata = JSON.parse('<%- JSON.stringify(jobdata) %>') || {};
+} catch (error) {
+    console.error("Error parsing jobdata:", error);
+    jobdata = {}; // Fallback to empty object
+}
+
+// Create custom job-ref element
+let jobRefele = document.createElement("job-ref");
+addJobButton.after(jobRefele);
+
+// Get select element inside job-ref
+const selectele = jobRefele.querySelector(".jobDropdown");
+
+
+
+// Populate dropdown
+for (let ele of availableroles) {
+    const opele = document.createElement("option");
+    opele.value = ele;
+    opele.innerText = ele;
+
+    // Check if this role matches jobdata.role and set it as selected
+    if (jobdata.role === ele) {
+        opele.selected = true;
+    }
+
+    selectele.appendChild(opele);
+    
+}
+availableroles=jobRoles.filter(item=>(item!==jobdata.role));
+
+
+}
+
+
+    })();
+    
+
+
+
+    addJobButton.addEventListener('click',()=>{
+      let jobRefele=document.createElement("job-ref");
+      addJobButton.after(jobRefele);
+    })
+
+    
+    jobDropdownclass.addEventListener('change',(event)=>{
+      const selectele=event.target;
+      const alldropdowns=document.querySelectorAll('.jobDropdown');
+      const cur=getdropdownvalues(alldropdowns);
+      availableroles=jobRoles.filter(item=>(!cur.includes(item)));
+      isChangeEventHandled = true;
+      
+    })
+
+    jobDropdownclass.addEventListener('click',(event)=>{
+
+      if (isChangeEventHandled) {
+        console.log("Change event already handled, skipping click.");
+        event.stopImmediatePropagation(); 
+        isChangeEventHandled = false; 
+        return;
+    }
+      const selectele=event.target;
+     
+      if (selectele && selectele.tagName === "SELECT") {
+        console.log("1");
+        const initialvalue=selectele.value;
+        const optags=selectele.querySelectorAll("option");
+        for(let ele of optags)
+        {
+          if(ele.value!==initialvalue) ele.remove();
+        }
+
+      for (let ele of availableroles) {
+          const opele = document.createElement("option");
+          opele.value = ele;
+          opele.innerText = ele;
+          selectele.appendChild(opele); 
+         
+      }
+}
+
+
+      
+    })
+   
+
+
+    
+  </script>
+</html>

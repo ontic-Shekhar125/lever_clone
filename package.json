@@ -23,6 +23,7 @@
     "express": "^4.21.2",
     "lever_clone": "file:",
     "mongoose": "^8.10.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "preline": "^2.7.0"
   }
 }

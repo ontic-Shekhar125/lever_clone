@@ -6,6 +6,8 @@
     <title>jobs</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script src="header.js"></script>
+    <script src="js/jobRef.js"></script>
+
    
   </head>
   <body class="font-inter">
@@ -83,7 +85,6 @@
         </div>
       </div>
     </nav>
-    <script src="jobRef.js"></script>
     <div class="mt-8 mr-100 ml-100 flex-col justify-center items-center">
       <div>
         <h1
@@ -97,7 +98,7 @@
         </h1>
       </div>
       <div>
-        <form action="" class="referralForm   ">
+        <form action="" class="referralForm">
           <div class="relative mb-6">
             <label class="flex items-center mb-2 text-sm font-semibold text-gray-900 capitalize">
                 Refer for Job(s)
@@ -177,10 +178,6 @@
     (async function (){
       jobRoles=await getroles();
       availableroles=Array.from(jobRoles);
-     
-
-      
-
     })();
     
     const referralForm=document.querySelector('.referralForm');
