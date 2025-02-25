@@ -2,7 +2,7 @@ const emNavBar = new Map([
     ['Home','/emHomepage/'],
     ['Referrals','/emreferrals/'],
     ['Jobs','/emjobs/'],
-    ['Interviews','/emInterviews/']
+    ['Interviews','/comInterviews/']
   ]);
 
 const adNavbar=new Map([

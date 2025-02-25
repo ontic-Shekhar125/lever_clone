@@ -10,15 +10,19 @@
   <script src="/js/formDropdown.js" defer></script> <!-- Link to your custom elements JS file -->
   <script src="/js/formSpan.js" defer></script> <!-- Link to your custom elements JS file -->
   <script src="/js/formButton.js" defer></script> <!-- Link to your custom elements JS file -->
-
+  <script src="/js/navbar.js" defer></script> 
+  <script src="/js/navElement.js" defer></script> 
   <script src="/js/form.js" defer></script> <!-- Link to your custom elements JS file -->
 
 
 
 </head>
 <body>
+  <custom-nav data-flag='<%- flag %>' data-index='<%- index %>'></custom-nav>
+
   <div class="mt-8 mr-48 ml-48 flex-col items-center">
     <custom-heading data-value="Feedback Form"></custom-heading>
+
     <whole-form  data-headers='<%- JSON.stringify(headers) %>' data-interview='<%- JSON.stringify(interview) %>'></whole-form>
   </div>
 

@@ -55,9 +55,9 @@ class wholeForm extends HTMLElement {
         //const onaction=this.getAttribute("data-onaction");
         const headers=JSON.parse(this.getAttribute("data-headers"));
         const interview=JSON.parse(this.getAttribute("data-interview"));
-
-        this.innerHTML=`
-            <form method="POST"  class="formclass"></form>
+        // const method = this.getAttribute("data-method") || "POST";
+        this.innerHTML = `
+            <form method="POST" class="formclass"></form>
         `;
         const data=this.getAttribute("data-insert");
         this.createform(headers,interview,data);

@@ -22,7 +22,7 @@
 <body>
   <div class="mt-8 mr-100 ml-100 flex-col items-center">
     <custom-heading data-value="Edit Job"></custom-heading>
-    <whole-form  data-headers='<%- JSON.stringify(headers) %>' data-insert='<%- JSON.stringify(data) %>'></whole-form>
+    <whole-form  data-method="PUT" data-headers='<%- JSON.stringify(headers) %>' data-insert='<%- JSON.stringify(data) %>'></whole-form>
   </div>
 
 </body>

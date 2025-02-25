@@ -56,10 +56,11 @@ app.get("/adjobs", (req, res) => {
 
 app.get("/editjobs/:id", async (req, res) => {
   
-  const headers=getjobheaders();
+  
   try {
+    const headers=getjobheaders();
     const jobId = req.params.id;
-
+    
     // Convert jobId to a MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(jobId)) {
         return res.status(400).send("Invalid Job ID");
@@ -76,7 +77,41 @@ app.get("/editjobs/:id", async (req, res) => {
     console.error("Error fetching job:", error);
     res.status(500).send("Internal Server Error");
 }
-  res.render("editjobs",{headers,flag:1,index:2,data:1});
+ });
+
+
+app.post("/editjobs/:id", async (req, res) => {
+  try {
+      const jobId = req.params.id;
+      console.log("hello");
+      // Convert jobId to ObjectId
+      if (!mongoose.Types.ObjectId.isValid(jobId)) {
+          return res.status(400).json({ message: "Invalid job ID format" });
+      }
+
+      const updatedJobData = req.body;
+
+      // Find job by ID and update
+      const updatedJob = await Job.findByIdAndUpdate(
+          new mongoose.Types.ObjectId(jobId), // Convert string to ObjectId
+          updatedJobData,
+          { new: true }
+      );
+
+      if (!updatedJob) {
+          return res.status(404).json({ message: "Job not found" });
+      }
+
+      //res.json({ message: "Job updated successfully", job: updatedJob });
+      res.send(`
+        <script>
+            alert("Job updated successfully!");
+            window.location.href = "/adjobs";
+        </script>
+    `);
+  } catch (error) {
+      res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 app.get("/createjob", async (req, res) => {
   const excludes=['_id','__v'];
@@ -172,6 +207,83 @@ app.get("/referalForm/:id", async (req, res) => {
       res.status(500).send("Internal Server Error");
   }
 });
+
+app.get("/adCandidates", async (req, res) => {
+  try {
+    // Fetch all candidates but exclude _id, __v, referred_jobs, notes, resume_link
+    const candidates = await Candidate.find({}).lean();
+
+    // Extract headers dynamically from the first candidate, if available
+    let headers =  Object.keys(Candidate.schema.paths)
+      .filter((key) => !["_id", "__v", "referred_jobs", "notes", "resume_link"].includes(key));
+    // Manually replace referred_by (ObjectId) with Employee name
+    // Convert referred_by (ObjectId) to Employee name using Promise.all()
+    const candidatesNew = await Promise.all(
+      candidates.map(async (candidate) => {
+        let newCandidate = { ...candidate }; // Create a new object from the candidate
+        
+        if (candidate.referred_by) {
+          const employee = await Employee.findById(candidate.referred_by).select("name").lean();
+          newCandidate["referred_by"] = employee ? employee.name : "N/A"; // Replace ObjectId with name
+        }
+        console.log(newCandidate);
+        return newCandidate; // Return modified object
+      })
+    );
+
+    // Render the template with headers and modified candidates data
+    res.render("candidates", { flag: 1, index: 1, headers, interviews:candidatesNew });
+
+  } catch (error) {
+    console.error("Error fetching candidates:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/adCandidates/:id", async (req, res) => {
+  try {
+    const jobId = req.params.id;
+
+    // 1️⃣ Fetch the Job using the provided ID
+    const job = await Job.findById(jobId).select("role").lean();
+    if (!job) {
+      return res.status(404).send("Job not found");
+    }
+    
+    const jobRole = job.role; // Extract the job role
+
+    // 2️⃣ Fetch candidates who have this role in referred_jobs array
+    const candidates = await Candidate.find({
+      referred_jobs: { $in: [jobRole] }, // Matches if role exists in referred_jobs array
+    }).lean();
+
+    // 3️⃣ Extract headers dynamically from Candidate schema
+    let headers = Object.keys(Candidate.schema.paths)
+      .filter((key) => !["_id", "__v", "referred_jobs", "notes", "resume_link"].includes(key));
+
+    // 4️⃣ Convert referred_by ObjectId to Employee name using Promise.all()
+    const candidatesNew = await Promise.all(
+      candidates.map(async (candidate) => {
+        let newCandidate = { ...candidate }; // Clone the candidate object
+        
+        if (candidate.referred_by) {
+          const employee = await Employee.findById(candidate.referred_by).select("name").lean();
+          newCandidate.referred_by = employee ? employee.name : "N/A"; // Replace ObjectId with name
+        }
+
+        return newCandidate; // Return modified candidate object
+      })
+    );
+
+    // 5️⃣ Render the template with headers and modified candidate data
+    res.render("candidates", { flag: 1, index: 1, headers, interviews: candidatesNew });
+
+  } catch (error) {
+    console.error("Error fetching candidates:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 app.get("/jobsdata", async (req, res) => {
   const jobsdata = await Job.find({}).select("-__v");
   res.json(jobsdata);
@@ -225,7 +337,7 @@ app.get("/comInterviews", async (req, res) => {
     const excludeFields = ["_id", "feedback_id", "interviewer_email","google_meet_link", "updatedAt", "round","status"];
     const headers = allFields.filter((field) => !excludeFields.includes(field));
     headers.push("Feedback status");
-    res.render("cominterview", { interviews: completedInterviews, headers:headers });
+    res.render("cominterview", { flag:0,index:3,interviews: completedInterviews, headers:headers });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error fetching interviews");
@@ -263,7 +375,7 @@ app.get("/feedback/:id", async (req, res) => {
     console.log(Object.keys(Feedback.schema.paths));
     const excludes=['createdAt','updatedAt','_id','__v','interview_id','interviewer_email'];
     const headers=Object.keys(Feedback.schema.paths).filter((item)=>!excludes.includes(item));
-    res.render("feedback", { interview, feedback: feedback || null,headers });
+    res.render("feedback", { flag:0,index:3,interview, feedback: feedback || null,headers });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
