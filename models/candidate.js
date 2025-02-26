@@ -8,9 +8,9 @@ const CandidateSchema = new mongoose.Schema({
   current_company: String,
   referred_jobs: [{ type: String }], // Array of job IDs or names
   referred_by: { type: mongoose.Schema.Types.ObjectId }, // Reference to an Employee/User
-  relationship_with_referrer: String,
+  relationship: String,
   notes: String,
-  resume_link: String
+  resume_link: String,
 });
 
 const Candidate = mongoose.model("Candidate", CandidateSchema);

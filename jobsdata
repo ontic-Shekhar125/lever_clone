@@ -1,0 +1,13 @@
+[ { "admin": "John Doe", "role": "Software Engineer", "department":
+"Engineering", "locationType": "Remote", "workType": "Full-time", "location":
+"San Francisco, CA" }, { "admin": "John Doe", "role": "Product Manager",
+"department": "Product", "locationType": "Hybrid", "workType": "Full-time",
+"location": "New York, NY" }, { "admin": "John Doe", "role": "Data Scientist",
+"department": "Data Science", "locationType": "Remote", "workType": "Contract",
+"location": "Austin, TX" }, { "admin": "John Doe", "role": "UX Designer",
+"department": "Design", "locationType": "On-site", "workType": "Full-time",
+"location": "Seattle, WA" }, { "admin": "John Doe", "role": "HR Manager",
+"department": "Human Resources", "locationType": "Hybrid", "workType":
+"Full-time", "location": "Chicago, IL" }, { "admin": "John Doe", "role":
+"Marketing Specialist", "department": "Marketing", "locationType": "Remote",
+"workType": "Part-time", "location": "Los Angeles, CA" } ]

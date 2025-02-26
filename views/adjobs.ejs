@@ -1,208 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Employee Jobs</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <script src="/js/heading.js" defer></script> <!-- Link to your custom elements JS file -->
+    <script src="/js/heading.js" defer></script>
+    <!-- Link to your custom elements JS file -->
 
-    <script src="/js/navbar.js" defer></script> 
-    <script src="/js/navElement.js" defer></script> 
-
-</head>
-<body>
-    <custom-nav data-flag='<%- flag %>' data-index='<%- index %>'></custom-nav>
+    <script src="/js/navbar.js" defer></script>
+    <script src="/js/navElement.js" defer></script>
+    <script src="/js/jobBtn.js" defer></script>
+  </head>
+  <body>
+    <custom-nav data-flag="<%- flag %>" data-index="<%- index %>"></custom-nav>
     <div class="mt-8 mr-40 ml-40 flex-col items-center">
-        <custom-heading data-value="Jobs"></custom-heading> 
-        <div class="filtersBox flex mb-4 justify-between">
-            <!-- Location Filter -->
-            <div class="relative">
-                <select
-                id="location"
-                class="block appearance-none w-full bg-gray-200 border border-gray-300 rounded p-2 pr-8 focus:outline-none focus:bg-white focus:border-gray-500"
-              >
-                <option value="">Select Location</option>
-                <!-- <option value="San Francisco">San Francisco</option>
+      <div class="flex justify-between">
+        <custom-heading data-value="Jobs"></custom-heading>
+        <job-btn data-path="/createjob" data-value="+ Create Job"></job-btn>
+      </div>
+
+      <div class="filtersBox flex mb-4 justify-between">
+        <!-- Location Filter -->
+        <div class="relative">
+          <select
+            id="location"
+            class="block appearance-none w-full bg-gray-200 border border-gray-300 rounded p-2 pr-8 focus:outline-none focus:bg-white focus:border-gray-500"
+          >
+            <option value="">Select Location</option>
+            <!-- <option value="San Francisco">San Francisco</option>
                         <option value="New York">New York</option>
                         <option value="Los Angeles">Los Angeles</option> -->
-                <!-- Add more options dynamically -->
-              </select>
-              <div
-                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-              >
-                <svg
-                  class="w-4 h-4 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M5 7l5 5 5-5z"></path>
-                </svg>
-              </div>
-            </div>
-    
-            <!-- Work Type Filter -->
-            <div class="relative">
-              <select
-                id="workType"
-                class="block appearance-none w-full bg-gray-200 border border-gray-300 rounded p-2 pr-8 focus:outline-none focus:bg-white focus:border-gray-500"
-              >
-                <option value="">Select Work Type</option>
-                <!-- <option value="Full-time">Full-time</option>
+            <!-- Add more options dynamically -->
+          </select>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+          >
+            <svg
+              class="w-4 h-4 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M5 7l5 5 5-5z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Work Type Filter -->
+        <div class="relative">
+          <select
+            id="workType"
+            class="block appearance-none w-full bg-gray-200 border border-gray-300 rounded p-2 pr-8 focus:outline-none focus:bg-white focus:border-gray-500"
+          >
+            <option value="">Select Work Type</option>
+            <!-- <option value="Full-time">Full-time</option>
                         <option value="Part-time">Part-time</option>
                         <option value="Freelance">Freelance</option> -->
-              </select>
-              <div
-                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-              >
-                <svg
-                  class="w-4 h-4 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M5 7l5 5 5-5z"></path>
-                </svg>
-              </div>
-            </div>
-    
-            <!-- Department Filter -->
-            <div class="relative">
-              <select
-                id="department"
-                class="block appearance-none w-full bg-gray-200 border border-gray-300 rounded p-2 pr-8 focus:outline-none focus:bg-white focus:border-gray-500"
-              >
-                <option value="">Select Department</option>
-                <!-- <option value="Development">Development</option>
+          </select>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+          >
+            <svg
+              class="w-4 h-4 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M5 7l5 5 5-5z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Department Filter -->
+        <div class="relative">
+          <select
+            id="department"
+            class="block appearance-none w-full bg-gray-200 border border-gray-300 rounded p-2 pr-8 focus:outline-none focus:bg-white focus:border-gray-500"
+          >
+            <option value="">Select Department</option>
+            <!-- <option value="Development">Development</option>
                         <option value="Sales">Sales</option>
                         <option value="Marketing">Marketing</option> -->
-              </select>
-              <div
-                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-              >
-                <svg
-                  class="w-4 h-4 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M5 7l5 5 5-5z"></path>
-                </svg>
-              </div>
-            </div>
-    
-            <!-- Location Type Filter -->
-            <div class="relative">
-              <select
-                id="locationType"
-                class="block appearance-none w-full bg-gray-200 border border-gray-300 rounded p-2 pr-8 focus:outline-none focus:bg-white focus:border-gray-500"
-              >
-                <option value="">Select Location Type</option>
-                <!-- <option value="Remote">Remote</option>
-                        <option value="On-site">On-site</option> -->
-              </select>
-              <div
-                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-              >
-                <svg
-                  class="w-4 h-4 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M5 7l5 5 5-5z"></path>
-                </svg>
-              </div>
-            </div>   
+          </select>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+          >
+            <svg
+              class="w-4 h-4 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M5 7l5 5 5-5z"></path>
+            </svg>
           </div>
+        </div>
 
-          <div class="flex flex-col">
-            <div class="overflow-x-auto pb-4">
-              <div class="min-w-full inline-block align-middle">
-                <div class="overflow-hidden border rounded-lg border-gray-300">
-                  <table class="table-auto min-w-full rounded-xl">
-                    <thead>
-                      <tr class="bg-gray-50">
-                        <th
-                          scope="col"
-                          class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
-                        >
-                          role
-                        </th>
-                        <th
-                          scope="col"
-                          class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
-                        >
-                          department
-                        </th>
-                        <th
-                          scope="col"
-                          class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
-                        >
-                          location
-                        </th>
-    
-                        <th
-                          scope="col"
-                          class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
-                        >
-                          Location Type
-                        </th>
-                        <th
-                          scope="col"
-                          class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
-                        >
-                          Work Type
-                        </th>
-                        <th
-                          scope="col"
-                          class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
-                        >
-                          admin
-                        </th>
-    
-                        <th
-                          scope="col"
-                          class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
-                        >
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody class="tableBody divide-y divide-gray-300"></tbody>
-                  </table>
-                </div>
-              </div>
+        <!-- Location Type Filter -->
+        <div class="relative">
+          <select
+            id="locationType"
+            class="block appearance-none w-full bg-gray-200 border border-gray-300 rounded p-2 pr-8 focus:outline-none focus:bg-white focus:border-gray-500"
+          >
+            <option value="">Select Location Type</option>
+            <!-- <option value="Remote">Remote</option>
+                        <option value="On-site">On-site</option> -->
+          </select>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+          >
+            <svg
+              class="w-4 h-4 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M5 7l5 5 5-5z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <div class="overflow-x-auto pb-4">
+          <div class="min-w-full inline-block align-middle">
+            <div class="overflow-hidden border rounded-lg border-gray-300">
+              <table class="table-auto min-w-full rounded-xl">
+                <thead>
+                  <tr class="bg-gray-50">
+                    <th
+                      scope="col"
+                      class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
+                    >
+                      role
+                    </th>
+                    <th
+                      scope="col"
+                      class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
+                    >
+                      department
+                    </th>
+                    <th
+                      scope="col"
+                      class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
+                    >
+                      location
+                    </th>
+
+                    <th
+                      scope="col"
+                      class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
+                    >
+                      Location Type
+                    </th>
+                    <th
+                      scope="col"
+                      class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
+                    >
+                      Work Type
+                    </th>
+                    <th
+                      scope="col"
+                      class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
+                    >
+                      admin
+                    </th>
+
+                    <th
+                      scope="col"
+                      class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody divide-y divide-gray-300"></tbody>
+              </table>
             </div>
           </div>
+        </div>
+      </div>
     </div>
-    
+
     <script>
-        function getjobid(path)
-        {
-            const trElement = path.closest("TR");
-            return trElement.getAttribute("id");
+      function getTr(path)
+      {
+        return path.closest("TR");
+      }
+      function getjobid(trElement) {
+        
+        return trElement.getAttribute("id");
+      }
+      async function getjobsdata() {
+        let url = "http://localhost:3000/jobsdata";
+        let response = await fetch(url);
+        return response.json();
+      }
+      class rowelement extends HTMLTableRowElement {
+        constructor() {
+          super();
         }
-        async function getjobsdata() {
-          let url = "http://localhost:3000/jobsdata";
-          let response = await fetch(url);
-          return response.json();
-        }
-        class rowelement extends HTMLTableRowElement {
-          constructor() {
-            super();
-          }
-          connectedCallback() {
-            this.innerHTML = `                            
+        connectedCallback() {
+          this.innerHTML = `                            
                    
       
                                           <td class="role p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 "> dell </td>
@@ -230,120 +238,116 @@
         
                                       
                                       `;
-          }
-        } 
-        customElements.define("row-element", rowelement, { extends: "tr" }); // (2)
-  
-        const mapofSets = new Map();
-        const filtersBox = document.querySelector(".filtersBox");
-  
-        const selectTags = filtersBox.getElementsByTagName("select");
-        let filters = [];
-        for (let ele of selectTags) {
-          const filter = ele.getAttribute("id");
-          filters.push(filter);
-          mapofSets.set(filter, new Set());
         }
-  
-        const mapKeys = mapofSets.keys();
-        const tableBody = document.querySelector(".tableBody");
-        let jobsdata;
-        (async function () {
-          jobsdata = await getjobsdata(); // Wait for the response
-  
-          if (jobsdata) {
-            for (let key in jobsdata) {
-              let row = document.createElement("tr", { is: "row-element" });
-              tableBody.append(row);
-              const job = jobsdata[key];
-  
-              for (let key in job) {
-                if (key === "_id") {
-                  row.setAttribute("id", job[key]);
-                  continue;
-                }
-                let col = row.querySelector(`.${key}`);
-                col.innerText = job[key];
-                if (filters.includes(key)) mapofSets.get(key).add(job[key]);
-              }
-            }
-          }
-  
-          for (let key of mapKeys) {
-            const selectTag = document.querySelector(`#${key}`);
-            for (let ele of mapofSets.get(key)) {
-              const optionTag = document.createElement("option");
-              optionTag.setAttribute("value", ele);
-              optionTag.innerText = ele;
-              selectTag.append(optionTag);
-            }
-          }
-        })();
-  
-        filtersBox.addEventListener("change", (event) => {
-          const filtersMap = new Map();
-          for (let selectTag of selectTags) {
-            const selectValue = selectTag.value;
-            const keyFilter = selectTag.id;
-            if (selectValue != "") filtersMap.set(keyFilter, selectValue);
-          }
-          tableBody.innerHTML = "";
+      }
+      customElements.define("row-element", rowelement, { extends: "tr" }); // (2)
+
+      const mapofSets = new Map();
+      const filtersBox = document.querySelector(".filtersBox");
+
+      const selectTags = filtersBox.getElementsByTagName("select");
+      let filters = [];
+      for (let ele of selectTags) {
+        const filter = ele.getAttribute("id");
+        filters.push(filter);
+        mapofSets.set(filter, new Set());
+      }
+
+      const mapKeys = mapofSets.keys();
+      const tableBody = document.querySelector(".tableBody");
+      let jobsdata;
+      (async function () {
+        jobsdata = await getjobsdata(); // Wait for the response
+
+        if (jobsdata) {
           for (let key in jobsdata) {
             let row = document.createElement("tr", { is: "row-element" });
-  
+            tableBody.append(row);
             const job = jobsdata[key];
-            let fg = 1;
+
             for (let key in job) {
-              if (filtersMap.has(key)) {
-                if (job[key] != filtersMap.get(key)) {
-                  fg = 0;
-                  break;
-                }
+              if (key === "_id") {
+                row.setAttribute("id", job[key]);
+                continue;
               }
-            }
-            if (fg) {
-              tableBody.append(row);
-              for (let key in job) {
-                if (key === "_id") {
-                  row.setAttribute("id", job[key]);
-                  continue;
-                }
-                let col = row.querySelector(`.${key}`);
-                col.innerText = job[key];
-              }
+              let col = row.querySelector(`.${key}`);
+              col.innerText = job[key];
+              if (filters.includes(key)) mapofSets.get(key).add(job[key]);
             }
           }
-        });
-  
-        tableBody.addEventListener("click", (event) => {
-          const buttonElement = event.target.closest("BUTTON");
-  
-          if (buttonElement && buttonElement.getAttribute("data-delete")) {
-            let fg = confirm("Sure you want to delete that job?");
-            if (fg == 0) return;
-           
-            const jobId =  getjobid(event.target);
-           
-            let url = "http://localhost:3000/jobs/delete/" + jobId;
-            (async function () {
-              let response = await fetch(url, { method: "DELETE" });
-  
-              let obj = await response.json();
-              trElement.remove();
-              alert("deleted succesfully");
-            })();
+        }
+
+        for (let key of mapKeys) {
+          const selectTag = document.querySelector(`#${key}`);
+          for (let ele of mapofSets.get(key)) {
+            const optionTag = document.createElement("option");
+            optionTag.setAttribute("value", ele);
+            optionTag.innerText = ele;
+            selectTag.append(optionTag);
           }
-          else if(buttonElement && buttonElement.getAttribute("data-edit"))
-          {
-            const jobId =  getjobid(event.target);
-            window.location.href=`/editjobs/${jobId}`;
+        }
+      })();
+
+      filtersBox.addEventListener("change", (event) => {
+        const filtersMap = new Map();
+        for (let selectTag of selectTags) {
+          const selectValue = selectTag.value;
+          const keyFilter = selectTag.id;
+          if (selectValue != "") filtersMap.set(keyFilter, selectValue);
+        }
+        tableBody.innerHTML = "";
+        for (let key in jobsdata) {
+          let row = document.createElement("tr", { is: "row-element" });
+
+          const job = jobsdata[key];
+          let fg = 1;
+          for (let key in job) {
+            if (filtersMap.has(key)) {
+              if (job[key] != filtersMap.get(key)) {
+                fg = 0;
+                break;
+              }
+            }
           }
-          else if(buttonElement && buttonElement.getAttribute("data-view"))
-          {
-            const jobId =  getjobid(event.target);
-            window.location.href=`/adCandidates/${jobId}`;
+          if (fg) {
+            tableBody.append(row);
+            for (let key in job) {
+              if (key === "_id") {
+                row.setAttribute("id", job[key]);
+                continue;
+              }
+              let col = row.querySelector(`.${key}`);
+              col.innerText = job[key];
+            }
           }
-        });
-      </script>
-</body>
+        }
+      });
+
+      tableBody.addEventListener("click", (event) => {
+        const buttonElement = event.target.closest("BUTTON");
+        const trElement=getTr(event.target);
+        const jobId = getjobid(trElement);
+        if (buttonElement && buttonElement.getAttribute("data-delete")) {
+          let fg = confirm("Sure you want to delete that job?");
+          if (fg == 0) return;
+
+
+          let url = "http://localhost:3000/jobs/delete/" + jobId;
+          (async function () {
+            let response = await fetch(url, { method: "DELETE" });
+
+            let obj = await response.json();
+            trElement.remove();
+            alert("deleted succesfully");
+          })();
+        } else if (buttonElement && buttonElement.getAttribute("data-edit")) {
+          
+          window.location.href = `/editjobs/${jobId}`;
+        } else if (buttonElement && buttonElement.getAttribute("data-view")) {
+          
+          window.location.href = `/adCandidates/${jobId}`;
+        }
+      });
+    </script>
+  </body>
 </html>

@@ -7,7 +7,5 @@ const employeeSchema = new mongoose.Schema({
   department: { type: String },
   designation: { type: String },
   location: { type: String },
-})    
- ;
-
+});
 module.exports = mongoose.model("Employee", employeeSchema);

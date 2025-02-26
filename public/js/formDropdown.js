@@ -1,15 +1,15 @@
 class FormDropdown extends HTMLElement {
-    constructor() {
-        super();
-    }
+  constructor() {
+    super();
+  }
 
-    connectedCallback() {
-        const val = this.getAttribute("data-value"); // Label text
-        let options = this.getAttribute("data-options");;
-        options=options.split(",");
-        console.log(options);
+  connectedCallback() {
+    const val = this.getAttribute("data-value"); // Label text
+    let options = this.getAttribute("data-options");
+    options = options.split(",");
+    console.log(options);
 
-        this.innerHTML = `
+    this.innerHTML = `
             <div class="relative mb-6">
                 <label class="flex items-center mb-2 text-gray-600 text-sm font-medium">
                     ${val} 
@@ -18,11 +18,16 @@ class FormDropdown extends HTMLElement {
                     </svg>
                 </label>
                 <select name='${val}' class="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 border border-gray-300 rounded-full focus:outline-none">
-                    ${options.map(option => `<option value="${option}">${option}</option>`).join('')}
+                    ${options
+                      .map(
+                        (option) =>
+                          `<option value="${option}">${option}</option>`
+                      )
+                      .join("")}
                 </select>
             </div>
         `;
-    }
+  }
 }
 
 customElements.define("form-dropdown", FormDropdown);
