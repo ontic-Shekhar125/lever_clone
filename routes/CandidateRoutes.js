@@ -71,6 +71,17 @@ async function addReferredName(candidates) {
     })
   );
 }
+
+async function addJobIds(candidates) {
+  return await Promise.all(
+    candidates.map(async (candidate) => {
+      let newCandidate = { ...candidate };
+      const job = await Job.findOne({ role: candidate.role });
+      newCandidate.jobId = job._id;
+      return newCandidate; // Return modified object
+    })
+  );
+}
 async function checkCandidateInInterview(candidateId, role) {
   try {
     const job = await Job.findOne({ role: role });
@@ -126,8 +137,10 @@ async function processCandidates(candidates) {
     console.log("updatedCandidates:", updatedCandidates);
     const statusCandidates = await addStatus(updatedCandidates);
     console.log("statusCandidates:", statusCandidates);
+    const finalCandidates = await addJobIds(statusCandidates);
+    console.log("finalCandidates:", finalCandidates);
 
-    return statusCandidates;
+    return finalCandidates;
   } catch (error) {
     console.error("Error:", error);
     return [];

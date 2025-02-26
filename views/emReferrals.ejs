@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Jobs</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="/js/heading.js" defer></script>
+    <!-- Link to your custom elements JS file -->
+
+    <script src="/js/navbar.js" defer></script>
+    <script src="/js/navElement.js" defer></script>
+    <script src="/js/jobBtn.js" defer></script>
+  </head>
+  <body>
+    <custom-nav data-flag="<%- flag %>" data-index="<%- index %>"></custom-nav>
+    <div class="mt-8 mr-40 ml-40 flex-col items-center">
+      <div class="flex justify-between">
+        <custom-heading data-value="My Referrals"></custom-heading>
+        <job-btn data-path="/referalForm" data-value="+ Refer Candidate"></job-btn>
+      </div>
+
+
+
+
+    </div>
+
+
+  </body>
+</html>

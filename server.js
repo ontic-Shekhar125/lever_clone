@@ -17,9 +17,18 @@ const ReferalFormRouter = require(path.join(
   __dirname,
   "./routes/ReferalRoutes"
 )); // Import your router file
+
+const employeeReferralRouter = require(path.join(
+  __dirname,
+  "./routes/emReferalRoutes"
+));
 const ScheduleInterviewRouter = require(path.join(
   __dirname,
   "./routes/ScheduleInterviewRoutes"
+));
+const interviewRouter = require(path.join(
+  __dirname,
+  "./routes/interviewRoutes"
 ));
 function getjobheaders() {
   const excludes = ["_id", "__v"];
@@ -35,24 +44,12 @@ app.set("views", path.join(__dirname, "views"));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "public")));
-// async function insertEmployee(employeeData) {
-//   const savedEmployee = await new Employee(employeeData).save();
-//   console.log("Inserted:", savedEmployee);
-//   await mongoose.disconnect();
-// }
-
-// insertEmployee({
-//   name: "Bob Smith",
-//   email: "bob.smith@example.com",
-//   phone: "+1 876-543-2109",
-//   department: "Engineering",
-//   designation: "Software Engineer",
-//   location: "Noida",
-// });
 
 app.use("/adCandidates", CandidatesRouter);
 app.use("/referalForm", ReferalFormRouter);
 app.use("/scheduleInt", ScheduleInterviewRouter);
+app.use("/emreferrals", employeeReferralRouter);
+app.use("/interviews", interviewRouter);
 const referrer = {
   _id: "67bd72b31f89e8105cae2006",
   name: "Bob Smith",
@@ -183,8 +180,6 @@ app.post("/createjob", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-
 
 app.get("/referalForm/:id", async (req, res) => {
   try {

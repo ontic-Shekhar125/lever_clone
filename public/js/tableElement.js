@@ -43,12 +43,12 @@ const columnConfig = {
         0: { text: "Schedule Interview", color: "green", hover: "green-600" },
         2: { text: "Waiting Feedback", color: "yellow", hover: "yellow-600" },
       };
-
+      console.log(row);
       const status = statusOptions[row.eStatus];
 
       if (status) {
         return `<a class="px-3 py-1 text-white bg-${status.color}-500 rounded hover:bg-${status.hover}" 
-                    href='/feedback/${row._id}' aria-label="${status.text}">
+                    href='/scheduleint/${row._id}/${row.jobId}' aria-label="${status.text}">
                   ${status.text}
                 </a>`;
       }

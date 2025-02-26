@@ -13,6 +13,6 @@ const interviewSchema = new mongoose.Schema({
     default: "Scheduled",
   },
   duration: { type: Number }, // In minutes
-}, { timestamps: true });
+});
 
 module.exports = mongoose.model("Interview", interviewSchema);

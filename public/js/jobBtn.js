@@ -8,9 +8,12 @@ class jobBtn extends HTMLElement {
       this.innerHTML = `                            
                          
 
-              <button   type="button" class="JobBtn w-32 h-10 bg-indigo-600 text-white rounded-full text-sm font-semibold hover:bg-indigo-800 transition-all duration-500">
-                ${val}
-                   </button>
+<a
+  type="button"
+  class="JobBtn px-3 py-3 w-32 h-10 bg-indigo-600 text-white rounded-full text-sm font-semibold hover:bg-indigo-800 transition-all duration-500 cursor-pointer">
+  ${val}
+</a>
+
                                 
                                 `;
     const btn=this.querySelector(".JobBtn");
