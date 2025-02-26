@@ -8,8 +8,23 @@ const Employee = require(path.join(__dirname, "../models/Employee")); // Ensure 
 const Candidate = require(path.join(__dirname, "../models/candidate")); // Ensure correct path
 const Interview = require(path.join(__dirname, "../models/interview")); // Ensure correct path
 
+function getHeaders() {
+    let headers = Object.keys(Interview.schema.paths).filter(
+      (key) =>
+        ![
+          "_id",
+          "__v",
+          "feedbackId",
+          "estatus",
+          "duration",
+          
+        ].includes(key)
+    );
+    return headers;
+  }
 
 router.get("/", async (req,res)=>{
-    res.render("scheduleInt",{flag:1,index:3});
+    const headers= getheaders();
+    res.render("scheduleInt",{flag:1,index:3,headers});
 })
 module.exports=router;
