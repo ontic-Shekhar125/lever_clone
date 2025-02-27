@@ -1,3 +1,4 @@
+const headerHash = new Map([["google_meet_link", "Google Meet Link"]]);
 const columnConfig = {
   date: {
     type: "date",
@@ -13,8 +14,12 @@ const columnConfig = {
   },
   google_meet_link: {
     type: "link",
-    formatter: (row) =>
-      `<a href="${row.google_meet_link}" target="_blank" class="text-blue-600 underline">Meet Link</a>`,
+    formatter: (row) => {
+      const meetLink = row.google_meet_link.startsWith("http")
+        ? row.google_meet_link
+        : `https://${row.google_meet_link}`;
+      return `<a href='${meetLink}' target="_blank" class="text-blue-600 underline">Meet Link</a>`;
+    },
   },
   status: {
     type: "status",
@@ -25,11 +30,11 @@ const columnConfig = {
           : "bg-gray-200 text-gray-800"
       }">${row.status}</span>`,
   },
-  "Feedback status": {
+  "Feedback Status": {
     type: "link",
     formatter: (row) => {
-      if (row.hasOwnProperty("feedback_id") && row.feedback_id) {
-        return `<button class="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600" onclick="editFeedback('${row.feedback_id}')">Edit Feedback</button>`;
+      if (row.hasOwnProperty("feedbackId") && row.feedbackId) {
+        return `<a class="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600" href='/feedback/${row._id}'>Edit Feedback</a>`;
       } else {
         return `<a class="px-3 py-1 text-white bg-green-500 rounded hover:bg-green-600" href='/feedback/${row._id}'>Add Feedback</a>`;
       }
@@ -42,13 +47,19 @@ const columnConfig = {
         1: { text: "Edit Interview Info", color: "blue", hover: "blue-600" },
         0: { text: "Schedule Interview", color: "green", hover: "green-600" },
         2: { text: "Waiting Feedback", color: "yellow", hover: "yellow-600" },
+        3: { text: "View the Feedback", color: "purple", hover: "purple-600" },
       };
       console.log(row);
       const status = statusOptions[row.eStatus];
 
-      if (status) {
+      if (row.eStatus!==3) {
         return `<a class="px-3 py-1 text-white bg-${status.color}-500 rounded hover:bg-${status.hover}" 
                     href='/scheduleint/${row._id}/${row.jobId}' aria-label="${status.text}">
+                  ${status.text}
+                </a>`;
+      } else {
+        return `<a class="px-3 py-1 text-white bg-${status.color}-500 rounded hover:bg-${status.hover}" 
+                    href='/feedback/${row.interviewId}/1' aria-label="${status.text}">
                   ${status.text}
                 </a>`;
       }
@@ -91,7 +102,7 @@ class CustomTable extends HTMLElement {
     headers.forEach((text) => {
       const th = document.createElement("th", { is: "custom-th" }); // Creates <custom-th>
       th.setAttribute("label", text);
-      th.innerText = text;
+      th.innerText = headerHash.has(text) ? headerHash.get(text) : text;
       headerRow.appendChild(th);
     });
   }

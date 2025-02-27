@@ -7,6 +7,7 @@ const Job = require(path.join(__dirname, "../models/jobs"));
 const Employee = require(path.join(__dirname, "../models/Employee")); // Ensure correct path
 const Candidate = require(path.join(__dirname, "../models/candidate")); // Ensure correct path
 const Interview = require(path.join(__dirname, "../models/interview")); // Ensure correct path
+const Feedback = require(path.join(__dirname, "../models/feedback")); // Ensure correct path
 
 function getHeaders() {
   let headers = Object.keys(Interview.schema.paths).filter(
@@ -48,40 +49,42 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:cId/:jobId", async (req, res) => {
-    try {
-      const { cId: candidateId, jobId } = req.params;
-      
-      // Fetch all required data in parallel
-      const [candidates, jobs, employees, interview] = await Promise.all([
-        Candidate.find({}),
-        Job.find({}),
-        Employee.find({}),
-        Interview.findOne({ candidateId, jobId }),
-      ]);
-  
-      // Construct the options object
-      const optionsObj = { candidates, jobs, employees };
-  
-      // Prepare data for the form
-      const data = interview
-        ? {
-            candidateId,
-            jobId,
-            google_meet_link: interview.google_meet_link,
-            date: interview.date ? interview.date.toISOString().slice(0, 16) : "",
-            interviewerId: interview.interviewerId,
-          }
-        : { candidateId, jobId };
-  
-      // Render the page
-      res.render("editInt", { flag: 1, index: 3, headers: getHeaders(), optionsObj, data });
-  
-    } catch (error) {
-      console.error("Error fetching interview details:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  });
-  
+  try {
+    const { cId: candidateId, jobId } = req.params;
+
+    // Fetch all required data in parallel
+    const [candidates, jobs, employees, interview] = await Promise.all([
+      Candidate.find({}),
+      Job.find({}),
+      Employee.find({}),
+      Interview.findOne({ candidateId, jobId }),
+    ]);
+    
+    const optionsObj = { candidates, jobs, employees };
+    const data = interview
+      ? {
+          candidateId,
+          jobId,
+          google_meet_link: interview.google_meet_link,
+          date: interview.date ? interview.date.toISOString().slice(0, 16) : "",
+          interviewerId: interview.interviewerId,
+        }
+      : { candidateId, jobId };
+
+    // Render the page
+    res.render("editInt", {
+      flag: 1,
+      index: 3,
+      headers: getHeaders(),
+      optionsObj,
+      data,
+    });
+  } catch (error) {
+    console.error("Error fetching interview details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 router.post(["/", "/:cId/:jobId"], async (req, res) => {
   try {
     const { candidateId, jobId, date, google_meet_link, interviewerId } =
@@ -99,11 +102,10 @@ router.post(["/", "/:cId/:jobId"], async (req, res) => {
     const role = await getRole(jobId);
     const candidate = await Candidate.findOne({ _id: candidateId }).lean();
 
-   
     let interview = await Interview.findOne({ candidateId, jobId });
-
+    let flag = 0;
     if (interview) {
-      
+      flag = 1;
       interview.date = new Date(date);
       interview.google_meet_link = google_meet_link;
       interview.interviewerId = interviewerId;
@@ -150,9 +152,7 @@ router.post(["/", "/:cId/:jobId"], async (req, res) => {
     // ✅ Send success message
     res.send(`
         <script>
-            alert("Interview ${
-              interview ? "Updated" : "Scheduled"
-            } successfully!");
+            alert("Interview ${flag ? "Updated" : "Scheduled"} successfully!");
             window.location.href = "/adjobs";
         </script>
       `);

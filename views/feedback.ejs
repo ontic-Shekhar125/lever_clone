@@ -20,10 +20,10 @@
 <body>
   <custom-nav data-flag='<%- flag %>' data-index='<%- index %>'></custom-nav>
 
-  <div class="mt-8 mr-48 ml-48 flex-col items-center">
+  <div class="mt-8 mx-80 flex-col items-center">
     <custom-heading data-value="Feedback Form"></custom-heading>
 
-    <whole-form  data-headers='<%- JSON.stringify(headers) %>' data-interview='<%- JSON.stringify(interview) %>'></whole-form>
+    <whole-form data-fixedflag='<%- JSON.stringify(fixedflag) %>' data-extradata='<%- JSON.stringify(extradata) %>' data-headers='<%- JSON.stringify(headers) %>' data-insert='<%- JSON.stringify(data) %>'></whole-form>
   </div>
 
 </body>

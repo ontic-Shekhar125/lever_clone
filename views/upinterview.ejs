@@ -8,10 +8,17 @@
   <script src="/js/tableHeader.js" defer></script> <!-- Link to your custom elements JS file -->
   <script src="/js/tableColumn.js" defer></script> <!-- Link to your custom elements JS file -->
   <script src="/js/tableElement.js" defer></script> <!-- Link to your custom elements JS file -->
+  <script src="/js/navbar.js" defer></script> 
+  <script src="/js/navElement.js" defer></script> 
+  <script src="/js/heading.js" defer></script> <!-- Link to your custom elements JS file -->
+
 </head>
 <body>
+  <custom-nav data-flag='<%- flag %>' data-index='<%- index %>'></custom-nav>
+
   <div class="mt-8 mr-48 ml-48 flex-col items-center">
-    <h1>Upcoming Interviews</h1>
+    <custom-heading data-value="Upcoming Interviews"></custom-heading>
+
 
     <custom-table data-interviews='<%- JSON.stringify(interviews) %>' data-headers='<%- JSON.stringify(headers) %>'></custom-table>
   </div>

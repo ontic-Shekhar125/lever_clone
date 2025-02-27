@@ -16,3 +16,4 @@ const interviewSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Interview", interviewSchema);
+

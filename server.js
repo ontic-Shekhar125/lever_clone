@@ -5,18 +5,17 @@ const path = require("path");
 const mongoose = require("mongoose");
 const Job = require(path.join(__dirname, "./models/jobs"));
 //const Interview = require(path.join(__dirname, "./models/Interview"));
-const Feedback = require(path.join(__dirname, "./models/Feedback")); // Ensure correct path
 app.use(express.json()); //
 app.use(express.urlencoded({ extended: true }));
 const Employee = require(path.join(__dirname, "./models/Employee")); // Ensure correct path
 const CandidatesRouter = require(path.join(
   __dirname,
   "./routes/CandidateRoutes"
-)); // Import your router file
+));
 const ReferalFormRouter = require(path.join(
   __dirname,
   "./routes/ReferalRoutes"
-)); // Import your router file
+));
 
 const employeeReferralRouter = require(path.join(
   __dirname,
@@ -30,19 +29,22 @@ const interviewRouter = require(path.join(
   __dirname,
   "./routes/interviewRoutes"
 ));
+
+const feedbackRouter = require(path.join(
+  __dirname,
+  "./routes/feedbackRoutes"
+));
 function getjobheaders() {
   const excludes = ["_id", "__v"];
   return Object.keys(Job.schema.paths).filter(
     (item) => !excludes.includes(item)
   );
 }
-// Set EJS as the view engine
+
 app.set("view engine", "ejs");
 
-// Set views directory (if needed)
 app.set("views", path.join(__dirname, "views"));
 
-// Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/adCandidates", CandidatesRouter);
@@ -50,6 +52,7 @@ app.use("/referalForm", ReferalFormRouter);
 app.use("/scheduleInt", ScheduleInterviewRouter);
 app.use("/emreferrals", employeeReferralRouter);
 app.use("/interviews", interviewRouter);
+app.use("/feedback", feedbackRouter);
 const referrer = {
   _id: "67bd72b31f89e8105cae2006",
   name: "Bob Smith",

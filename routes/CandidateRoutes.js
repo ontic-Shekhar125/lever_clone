@@ -7,6 +7,7 @@ const Job = require(path.join(__dirname, "../models/jobs"));
 const Employee = require(path.join(__dirname, "../models/Employee")); // Ensure correct path
 const Candidate = require(path.join(__dirname, "../models/candidate")); // Ensure correct path
 const Interview = require(path.join(__dirname, "../models/interview")); // Ensure correct path
+const Feedback = require(path.join(__dirname, "../models/feedback")); // Ensure correct path
 
 async function createInterview() {
   try {
@@ -102,11 +103,15 @@ async function checkCandidateInInterview(candidateId, role) {
   }
 }
 
-async function getEstatus(objectId, role) {
+async function getEstatus(objectId, role,candidate) {
   const Interview = await checkCandidateInInterview(objectId, role);
   let status = 0;
   if (Interview && Interview.estatus === "Completed") {
-    if (Interview.feedbackId) status = 3;
+    if (Interview.feedbackId) 
+      {
+        status = 3;
+        candidate.interviewId=Interview._id;
+      }
     else status = 2;
   } else if (Interview && Interview.estatus === "Scheduled") {
     status = 1;
@@ -118,7 +123,7 @@ async function addStatus(updatedCandidates) {
     updatedCandidates.map(async (candidate) => {
       const objectId = candidate._id;
       const role = candidate.role;
-      candidate["eStatus"] = await getEstatus(objectId, role);
+      candidate["eStatus"] = await getEstatus(objectId, role,candidate);
       return candidate;
     })
   );

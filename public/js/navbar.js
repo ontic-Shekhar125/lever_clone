@@ -8,7 +8,7 @@ const adNavbar = new Map([
   ["Home", "/adHomepage/"],
   ["Candidates", "/adCandidates/"],
   ["Jobs", "/adjobs/"],
-  ["Interviews", "/adInterviews/"],
+  ["Schedule Interview", "/scheduleint/"],
 ]);
 
 class customNav extends HTMLElement {
