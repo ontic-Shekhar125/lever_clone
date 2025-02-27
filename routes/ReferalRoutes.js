@@ -6,6 +6,7 @@ const path = require("path");
 
 const Employee = require(path.join(__dirname, "../models/Employee")); // Ensure correct path
 const Candidate = require(path.join(__dirname, "../models/candidate")); // Ensure correct path
+const referrer_id = "67bf5971d24618e1f498ada5";
 
 router.post("/", async (req, res) => {
   try {
@@ -18,7 +19,6 @@ router.post("/", async (req, res) => {
       relationship,
       referred_jobs,
     } = req.body;
-    const referrer_id = "67bd72b31f89e8105cae2006";
     // Ensure referred_jobs is an array (it may come as a single value)
     const jobsArray = Array.isArray(referred_jobs)
       ? referred_jobs
@@ -59,4 +59,6 @@ router.get("/", (req, res) => {
     jobdata: undefined,
   });
 });
+
+
 module.exports = router;

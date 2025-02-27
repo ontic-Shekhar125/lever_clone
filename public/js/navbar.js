@@ -1,5 +1,5 @@
 const emNavBar = new Map([
-  ["Home", "/emHomepage/"],
+  ["Home", "/homepage/0"],
   ["Referrals", "/emreferrals/"],
   ["Jobs", "/emjobs/"],
   ["Interviews", "/comInterviews/"],

@@ -103,16 +103,14 @@ async function checkCandidateInInterview(candidateId, role) {
   }
 }
 
-async function getEstatus(objectId, role,candidate) {
+async function getEstatus(objectId, role, candidate) {
   const Interview = await checkCandidateInInterview(objectId, role);
   let status = 0;
   if (Interview && Interview.estatus === "Completed") {
-    if (Interview.feedbackId) 
-      {
-        status = 3;
-        candidate.interviewId=Interview._id;
-      }
-    else status = 2;
+    if (Interview.feedbackId) {
+      status = 3;
+      candidate.interviewId = Interview._id;
+    } else status = 2;
   } else if (Interview && Interview.estatus === "Scheduled") {
     status = 1;
   }
@@ -123,7 +121,7 @@ async function addStatus(updatedCandidates) {
     updatedCandidates.map(async (candidate) => {
       const objectId = candidate._id;
       const role = candidate.role;
-      candidate["eStatus"] = await getEstatus(objectId, role,candidate);
+      candidate["eStatus"] = await getEstatus(objectId, role, candidate);
       return candidate;
     })
   );
@@ -173,7 +171,7 @@ router.get("/", async (req, res) => {
       flag: 1,
       index: 1,
       headers,
-      interviews: updatedCandidates,
+      data: updatedCandidates,
     });
   } catch (error) {
     console.error("Error fetching candidates:", error);
@@ -191,42 +189,22 @@ router.get("/:id", async (req, res) => {
       return res.status(404).send("Job not found");
     }
 
-    const jobRole = job.role; // Extract the job role
+    const jobRole = job.role;
 
-    // 2️⃣ Fetch candidates who have this role in referred_jobs array
-    const candidates = await Candidate.find({
-      referred_jobs: { $in: [jobRole] }, // Matches if role exists in referred_jobs array
-    }).lean();
-    console.log(candidates);
-    // 3️⃣ Extract headers dynamically from Candidate schema
-    let headers = Object.keys(Candidate.schema.paths).filter(
-      (key) =>
-        !["_id", "__v", "referred_jobs", "notes", "resume_link"].includes(key)
+    const candidates = await Candidate.find({}).lean();
+
+    let headers = getHeaders();
+
+    const updatedCandidates = await processCandidates(candidates);
+    const filteredCandidates = updatedCandidates.filter(
+      (candidate) => candidate.role === jobRole
     );
 
-    // 4️⃣ Convert referred_by ObjectId to Employee name using Promise.all()
-    const candidatesNew = await Promise.all(
-      candidates.map(async (candidate) => {
-        let newCandidate = { ...candidate }; // Clone the candidate object
-
-        if (candidate.referred_by) {
-          const employee = await Employee.findById(candidate.referred_by)
-            .select("name")
-            .lean();
-          newCandidate.referred_by = employee ? employee.name : "N/A"; // Replace ObjectId with name
-        }
-
-        return newCandidate; // Return modified candidate object
-      })
-    );
-
-    // 5️⃣ Render the template with headers and modified candidate data
-    //console.log(candidatesNew);
     res.render("candidates", {
       flag: 1,
       index: 1,
       headers,
-      interviews: candidatesNew,
+      data: filteredCandidates,
     });
   } catch (error) {
     console.error("Error fetching candidates:", error);

@@ -34,6 +34,11 @@ const feedbackRouter = require(path.join(
   __dirname,
   "./routes/feedbackRoutes"
 ));
+
+const homepageRouter = require(path.join(
+  __dirname,
+  "./routes/homepageRoutes"
+));
 function getjobheaders() {
   const excludes = ["_id", "__v"];
   return Object.keys(Job.schema.paths).filter(
@@ -53,6 +58,7 @@ app.use("/scheduleInt", ScheduleInterviewRouter);
 app.use("/emreferrals", employeeReferralRouter);
 app.use("/interviews", interviewRouter);
 app.use("/feedback", feedbackRouter);
+app.use("/homepage", homepageRouter);
 const referrer = {
   _id: "67bd72b31f89e8105cae2006",
   name: "Bob Smith",

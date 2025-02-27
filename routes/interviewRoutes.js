@@ -40,14 +40,14 @@ function getHeaders(flag) {
     "duration",
     "jobId",
   ];
-  if(flag) excludes.push("google_meet_link")
+  if (flag) excludes.push("google_meet_link");
   let headers = Object.keys(Interview.schema.paths).filter(
     (key) => !excludes.includes(key)
   );
   headers.push("role");
   headers.push("name");
   headers.push("email");
-  if(flag) headers.push("Feedback Status");
+  if (flag) headers.push("Feedback Action");
   return headers;
 }
 router.get("/upcoming", async (req, res) => {
@@ -64,12 +64,14 @@ router.get("/upcoming", async (req, res) => {
 
     console.log("Current UTC Time:", currentTimeUTC);
     console.log("Upcoming Interviews:", upcomingInterviews);
-
-    const finalInterviews = await updateInterviews(upcomingInterviews);
     const headers = getHeaders(0);
+    const finalInterviews = await updateInterviews(upcomingInterviews);
+    if (req.headers.accept && req.headers.accept.includes("application/json")) {
+      return res.json({ success: true, data: finalInterviews, headers });
+    }
 
     res.render("upinterview", {
-      interviews: finalInterviews,
+      data: finalInterviews,
       headers: headers,
       flag: 0,
       index: 3,
@@ -96,11 +98,44 @@ router.get("/completed", async (req, res) => {
     const finalInterviews = await updateInterviews(completedInterviews);
 
     const headers = getHeaders(1);
-    
+    if (req.headers.accept && req.headers.accept.includes("application/json")) {
+      return res.json({ success: true, data: finalInterviews, headers });
+    }
     res.render("cominterview", {
       flag: 0,
       index: 3,
-      interviews: finalInterviews,
+      data: finalInterviews,
+      headers: headers,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error fetching interviews");
+  }
+});
+
+router.get("/pending", async (req, res) => {
+  try {
+    const currentTimeUTC = new Date();
+
+    const completedInterviews = await Interview.find({
+      date: { $lt: currentTimeUTC },
+      estatus: "Completed",
+      feedbackId: { $exists: false }, // Find documents where feedbackId does not exist
+    }).sort({ date: 1 })
+      .lean(); // `lean()` makes it return plain JS objects
+
+    console.log("Current UTC Time:", currentTimeUTC);
+    console.log("completed Interviews:", completedInterviews);
+    const finalInterviews = await updateInterviews(completedInterviews);
+
+    const headers = getHeaders(1);
+    if (req.headers.accept && req.headers.accept.includes("application/json")) {
+      return res.json({ success: true, data: finalInterviews, headers });
+    }
+    res.render("cominterview", {
+      flag: 0,
+      index: 3,
+      data: finalInterviews,
       headers: headers,
     });
   } catch (error) {

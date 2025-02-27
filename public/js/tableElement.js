@@ -30,7 +30,7 @@ const columnConfig = {
           : "bg-gray-200 text-gray-800"
       }">${row.status}</span>`,
   },
-  "Feedback Status": {
+  "Feedback Action": {
     type: "link",
     formatter: (row) => {
       if (row.hasOwnProperty("feedbackId") && row.feedbackId) {
@@ -93,7 +93,7 @@ class CustomTable extends HTMLElement {
 
     const headers = JSON.parse(this.getAttribute("data-headers"));
     this.insertheaders(headers);
-    this.insertdata(this.getAttribute("data-interviews"), headers);
+    this.insertdata(JSON.parse(this.getAttribute("data-insert")), headers);
   }
 
   insertheaders(headers) {
@@ -107,7 +107,7 @@ class CustomTable extends HTMLElement {
     });
   }
   insertdata(data, headers) {
-    data = JSON.parse(data);
+   
     const tableBody = this.querySelector(".tableBody");
     tableBody.innerHTML = "";
     console.log("Parsed Data:", data);
