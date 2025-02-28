@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Homepage</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="/js/navbar.js" defer></script>
+    <script src="/js/navElement.js" defer></script>
+    <script src="/js/heading.js" defer></script>
+</head>
+<body >
+    <custom-nav data-flag="<%- flag %>" data-index="<%- index %>"></custom-nav>
+
+    <div class="bg-white min-h-screen p-6 mx-40">
+        <!-- Heading -->
+        <custom-heading data-value="Admin Homepage"></custom-heading>
+
+        
+        <!-- Analytics Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+          <div class="p-4 bg-gray-100 rounded-lg shadow-md">
+            <h2 class="text-lg font-semibold text-gray-700">Current Jobs</h2>
+            <p class="text-2xl font-bold text-gray-900"><%- jobs %></p>
+          </div>
+          <div class="p-4 bg-gray-100 rounded-lg shadow-md">
+            <h2 class="text-lg font-semibold text-gray-700">Candidates Referred</h2>
+            <p class="text-2xl font-bold text-gray-900"><%- candidates %></p>
+          </div>
+          <div class="p-4 bg-gray-100 rounded-lg shadow-md">
+            <h2 class="text-lg font-semibold text-gray-700">Scheduled Interviews</h2>
+            <p class="text-2xl font-bold text-gray-900"><%- scheduledInterviews %></p>
+          </div>
+          <div class="p-4 bg-gray-100 rounded-lg shadow-md">
+            <h2 class="text-lg font-semibold text-gray-700">Pending Feedback</h2>
+            <p class="text-2xl font-bold text-gray-900"><%- pendingFeedback %></p>
+          </div>
+          <div class="p-4 bg-gray-100 rounded-lg shadow-md">
+            <h2 class="text-lg font-semibold text-gray-700">Feedback Submitted</h2>
+            <p class="text-2xl font-bold text-gray-900"><%- feedbacks %></p>
+          </div>
+        </div>
+      
+        <!-- Recent Activity -->
+        <div class="mt-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Recent Activity</h2>
+          <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+            <ul class="divide-y divide-gray-300">
+              <li class="py-2 text-gray-700">John Doe was referred for Software Engineer role</li>
+              <li class="py-2 text-gray-700">Alice Smith scheduled an interview for UX Designer</li>
+              <li class="py-2 text-gray-700">Michael Johnson submitted feedback for Backend Developer</li>
+              <li class="py-2 text-gray-700">Emily Davis was referred for Data Analyst role</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      
+</body>
+</html>

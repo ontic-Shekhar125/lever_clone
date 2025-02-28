@@ -2,7 +2,7 @@ const homearr = [
   ["Upcoming Interviews", "/interviews/upcoming"],
   ["Completed Interviews", "/interviews/completed"],
   ["Pending Feedback", "/interviews/pending"],
-  ["Upcoming Interviews", "/interviews/upcoming"],
+  ["My Referrals", "/emreferrals"],
 ];
 
 const path = "http://localhost:3000";
@@ -57,7 +57,7 @@ class customHomepage extends HTMLElement {
 
   connectedCallback() {
     this.innerHTML = `
-    <div class="container mx-auto mt-6 px-2">
+    <div class="container mt-3 px-2">
       <div class="homegrid grid grid-cols-2 gap-4">
         
       </div>

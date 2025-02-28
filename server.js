@@ -3,11 +3,14 @@ const app = express();
 const port = 3000;
 const path = require("path");
 const mongoose = require("mongoose");
-const Job = require(path.join(__dirname, "./models/jobs"));
-//const Interview = require(path.join(__dirname, "./models/Interview"));
+
 app.use(express.json()); //
 app.use(express.urlencoded({ extended: true }));
 const Employee = require(path.join(__dirname, "./models/Employee")); // Ensure correct path
+const Job = require(path.join(__dirname, "./models/jobs"));
+const Interview = require(path.join(__dirname, "./models/interview"));
+const Feedback = require(path.join(__dirname, "./models/feedback"));
+const Candidate = require(path.join(__dirname, "./models/candidate"));
 const CandidatesRouter = require(path.join(
   __dirname,
   "./routes/CandidateRoutes"
@@ -30,15 +33,9 @@ const interviewRouter = require(path.join(
   "./routes/interviewRoutes"
 ));
 
-const feedbackRouter = require(path.join(
-  __dirname,
-  "./routes/feedbackRoutes"
-));
+const feedbackRouter = require(path.join(__dirname, "./routes/feedbackRoutes"));
 
-const homepageRouter = require(path.join(
-  __dirname,
-  "./routes/homepageRoutes"
-));
+const homepageRouter = require(path.join(__dirname, "./routes/homepageRoutes"));
 function getjobheaders() {
   const excludes = ["_id", "__v"];
   return Object.keys(Job.schema.paths).filter(
@@ -77,15 +74,29 @@ mongoose
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/index.html"));
 });
-
-app.get("/jobs", (req, res) => {
-  res.sendFile(path.join(__dirname, "/jobs.html"));
+app.get("/adhomepage", async (req, res) => {
+  const currentTimeUTC = new Date();
+  const alljobs = await Job.find({});
+  const jobs = alljobs.length;
+  const allCandidates = await Candidate.find({});
+  const candidates = allCandidates.length;
+  const Interviews = await Interview.find({ estatus: "Scheduled" });
+  const feedbacks = await Feedback.find({});
+  const pendingFeedbacks = await Interview.find({
+    date: { $lt: currentTimeUTC },
+    estatus: "Completed",
+    feedbackId: { $exists: false }, // Find documents where feedbackId does not exist
+  });
+  res.render("adHomepage", {
+    flag: 1,
+    index: 0,
+    jobs,
+    candidates,
+    scheduledInterviews: Interviews.length,
+    pendingFeedback: pendingFeedbacks.length,
+    feedbacks: feedbacks.length,
+  });
 });
-
-app.get("/jobs", (req, res) => {
-  res.sendFile(path.join(__dirname, "/jobs.html"));
-});
-
 app.get("/adjobs", (req, res) => {
   res.render("adjobs", { flag: 1, index: 2 });
 });
@@ -459,38 +470,6 @@ app.post("/feedback/:id", async (req, res) => {
     console.error("Error:", error);
     res.status(500).json({ message: "Server error" });
   }
-});
-
-app.get("/emHomepage", async (req, res) => {
-  const currentTimeUTC = new Date(); // Get current UTC time
-
-  // Fetch upcoming interviews with date greater than current UTC time
-  const upcomingInterviews = await Interview.find({
-    date: { $gt: currentTimeUTC },
-  }).lean(); // `lean()` makes it return plain JS objects
-
-  console.log("Current UTC Time:", currentTimeUTC);
-  console.log("Upcoming Interviews:", upcomingInterviews);
-
-  const allFields = Object.keys(upcomingInterviews.schema.paths);
-  const excludeFields = [
-    "_id",
-    "feedback_id",
-    "interviewer_email",
-    "duration",
-    "updatedAt",
-    "round",
-    "status",
-  ];
-  const headers = allFields.filter((field) => !excludeFields.includes(field));
-
-  res.render("emHomepage", {
-    flag: 0,
-    index: 0,
-    interviews: upcomingInterviews,
-    headers: headers,
-  });
-  // res.render(,{flag:0 , index:0});
 });
 
 app.listen(port, () => {

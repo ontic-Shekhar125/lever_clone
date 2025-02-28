@@ -3,33 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Employee Homepage</title>
+    <title>Candidates</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <script src="/js/navbar.js" defer></script>
-    <script src="/js/navElement.js" defer></script>
     <script src="/js/tableHeader.js" defer></script>
     <!-- Link to your custom elements JS file -->
     <script src="/js/tableColumn.js" defer></script>
     <!-- Link to your custom elements JS file -->
     <script src="/js/tableElement.js" defer></script>
-    <script src="/js/homepage.js" defer></script>
-    <script src="/js/homepageElement.js" defer></script>
-    <script src="/js/heading.js" defer></script>
-
     <!-- Link to your custom elements JS file -->
+    <script src="/js/heading.js" defer></script>
+    <!-- Link to your custom elements JS file -->
+    <script src="/js/navbar.js" defer></script>
+    <script src="/js/navElement.js" defer></script>
+    <script src="/js/jobBtn.js" defer></script>
   </head>
   <body>
     <custom-nav data-flag="<%- flag %>" data-index="<%- index %>"></custom-nav>
-    <!-- Main Content -->
 
-    <div class="mt-4 mr-30 ml-30 flex-col items-center">
-      <custom-heading data-value="Employee Homepage"></custom-heading>
-      <custom-home data-flag="<%- flag %>"></custom-home>
+    <div class="mt-8 mr-35 ml-35 flex-col items-center">
+      <div class="flex justify-between">
+        <custom-heading data-value="Interviews"></custom-heading>
+        <job-btn
+          data-path="/scheduleint"
+          data-value="Schedule Interview"
+        ></job-btn>
+      </div>
+      <custom-table
+        data-insert='<%- JSON.stringify(data) %>'
+        data-headers='<%- JSON.stringify(headers) %>'
+      ></custom-table>
     </div>
   </body>
-  <style>
-    .table-container {
-      min-height: 270px; /* Ensuring all tables have the same height */
-    }
-  </style>
 </html>

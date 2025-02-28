@@ -3,12 +3,33 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const path = require("path");
 
-const Employee = require(path.join(__dirname, "../models/Employee")); // Ensure correct path
-const Candidate = require(path.join(__dirname, "../models/candidate")); // Ensure correct path
-const Interview = require(path.join(__dirname, "../models/interview")); // Ensure correct path
-const Job = require(path.join(__dirname, "../models/jobs")); // Ensure correct path
-
+const {
+  updateFn,
+  addReferredName,
+  addJobIds,
+  checkCandidateInInterview,
+  getEstatus,
+  addStatus,
+  processCandidates,
+  Job,
+  Employee,
+  Candidate,
+  Interview,
+  Feedback,
+} = require(path.join(__dirname, "../public/js/candidateFunctions"));
 const interviewerId = "67bf5971d24618e1f498ada5";
+function getInterviewHeaders() {
+  let headers = [
+    "date",
+    "name",
+    "email",
+    "interviewerName",
+    "role",
+    "google_meet_link",
+  ];
+  headers.push("eStatus");
+  return headers;
+}
 
 async function updateInterviews(interviews) {
   const updated = await Promise.all(
@@ -121,7 +142,8 @@ router.get("/pending", async (req, res) => {
       date: { $lt: currentTimeUTC },
       estatus: "Completed",
       feedbackId: { $exists: false }, // Find documents where feedbackId does not exist
-    }).sort({ date: 1 })
+    })
+      .sort({ date: 1 })
       .lean(); // `lean()` makes it return plain JS objects
 
     console.log("Current UTC Time:", currentTimeUTC);
@@ -136,6 +158,29 @@ router.get("/pending", async (req, res) => {
       flag: 0,
       index: 3,
       data: finalInterviews,
+      headers: headers,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error fetching interviews");
+  }
+});
+router.get("/admin", async (req, res) => {
+  try {
+    const headers = getInterviewHeaders();
+    const candidates = await Candidate.find({}).lean();
+
+    const updatedCandidates = await processCandidates(candidates);
+    const finalCandidates=updatedCandidates.filter((candidate)=>{
+      return candidate.eStatus!==0;
+    });
+    if (req.headers.accept && req.headers.accept.includes("application/json")) {
+      return res.json({ success: true, data: finalCandidates, headers });
+    }
+    res.render("adInterviews", {
+      flag: 1,
+      index: 3,
+      data: finalCandidates,
       headers: headers,
     });
   } catch (error) {

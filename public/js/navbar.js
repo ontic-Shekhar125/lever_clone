@@ -2,13 +2,13 @@ const emNavBar = new Map([
   ["Home", "/homepage/0"],
   ["Referrals", "/emreferrals/"],
   ["Jobs", "/emjobs/"],
-  ["Interviews", "/comInterviews/"],
+  ["Interviews", "/interviews/completed"],
 ]);
 const adNavbar = new Map([
-  ["Home", "/adHomepage/"],
+  ["Home", "/adhomepage/"],
   ["Candidates", "/adCandidates/"],
   ["Jobs", "/adjobs/"],
-  ["Schedule Interview", "/scheduleint/"],
+  ["Interviews", "/interviews/admin/"],
 ]);
 
 class customNav extends HTMLElement {

@@ -1,4 +1,11 @@
-const headerHash = new Map([["google_meet_link", "Google Meet Link"]]);
+const headerHash = new Map([
+  ["google_meet_link", "Google Meet Link"],
+  ["eStatus", "Action"],
+  ["current_company", "Current Company"],
+  ["current_location", "Current Location"],
+  ["referred_by", "Referred By"],
+  ["interviewerName","Interviewer Name"]
+]);
 const columnConfig = {
   date: {
     type: "date",
@@ -52,7 +59,7 @@ const columnConfig = {
       console.log(row);
       const status = statusOptions[row.eStatus];
 
-      if (row.eStatus!==3) {
+      if (row.eStatus !== 3) {
         return `<a class="px-3 py-1 text-white bg-${status.color}-500 rounded hover:bg-${status.hover}" 
                     href='/scheduleint/${row._id}/${row.jobId}' aria-label="${status.text}">
                   ${status.text}
@@ -63,6 +70,29 @@ const columnConfig = {
                   ${status.text}
                 </a>`;
       }
+
+      return `<span class="text-gray-500 italic">No Action</span>`; // Handles unexpected statuses
+    },
+  },
+  "Referral Status": {
+    formatter: (row) => {
+      const statusOptions = {
+        1: { text: "Interview Scheduled", color: "blue", hover: "blue-600" },
+        0: { text: "Not Shortlisted", color: "green", hover: "green-600" },
+        2: {
+          text: "Interview Completed",
+          color: "yellow",
+          hover: "yellow-600",
+        },
+        3: { text: "Selected", color: "purple", hover: "purple-600" },
+      };
+      console.log(row);
+      const status = statusOptions[row.eStatus];
+
+      return `<a class="px-3 py-1 text-white bg-${status.color}-500 rounded " 
+                     aria-label="${status.text}">
+                  ${status.text}
+                </a>`;
 
       return `<span class="text-gray-500 italic">No Action</span>`; // Handles unexpected statuses
     },
@@ -107,7 +137,6 @@ class CustomTable extends HTMLElement {
     });
   }
   insertdata(data, headers) {
-   
     const tableBody = this.querySelector(".tableBody");
     tableBody.innerHTML = "";
     console.log("Parsed Data:", data);
