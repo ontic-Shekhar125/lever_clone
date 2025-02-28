@@ -8,6 +8,7 @@ const Employee = require(path.join(__dirname, "../models/Employee")); // Ensure 
 const Candidate = require(path.join(__dirname, "../models/candidate")); // Ensure correct path
 const Interview = require(path.join(__dirname, "../models/interview")); // Ensure correct path
 const Feedback = require(path.join(__dirname, "../models/feedback")); // Ensure correct path
+const { logActivity } = require(path.join(__dirname, "../socketFunctions"));
 
 function getHeaders() {
   let headers = Object.keys(Interview.schema.paths).filter(
@@ -59,7 +60,7 @@ router.get("/:cId/:jobId", async (req, res) => {
       Employee.find({}),
       Interview.findOne({ candidateId, jobId }),
     ]);
-    
+
     const optionsObj = { candidates, jobs, employees };
     const data = interview
       ? {
@@ -70,12 +71,15 @@ router.get("/:cId/:jobId", async (req, res) => {
           interviewerId: interview.interviewerId,
         }
       : { candidateId, jobId };
+      let heading= (!interview ? "Schedule" : "Edit") + " Interview";
+
 
     // Render the page
     res.render("editInt", {
       flag: 1,
       index: 3,
       headers: getHeaders(),
+      heading :heading,
       optionsObj,
       data,
     });
@@ -150,10 +154,16 @@ router.post(["/", "/:cId/:jobId"], async (req, res) => {
     }
 
     // ✅ Send success message
+    await logActivity(
+      `${candidate.name} Interview was ${
+        flag ? "Updated" : "Scheduled"
+      } for ${role}`
+    );
+
     res.send(`
         <script>
             alert("Interview ${flag ? "Updated" : "Scheduled"} successfully!");
-            window.location.href = "/adjobs";
+            window.location.href = "/adCandidates";
         </script>
       `);
   } catch (error) {

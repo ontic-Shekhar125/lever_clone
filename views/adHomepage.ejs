@@ -8,6 +8,7 @@
     <script src="/js/navbar.js" defer></script>
     <script src="/js/navElement.js" defer></script>
     <script src="/js/heading.js" defer></script>
+   
 </head>
 <body >
     <custom-nav data-flag="<%- flag %>" data-index="<%- index %>"></custom-nav>
@@ -45,10 +46,9 @@
         <div class="mt-8">
           <h2 class="text-2xl font-bold text-gray-900 mb-4">Recent Activity</h2>
           <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-            <ul class="divide-y divide-gray-300">
+            <ul class="recent-activity-list divide-y divide-gray-300">
               <li class="py-2 text-gray-700">John Doe was referred for Software Engineer role</li>
               <li class="py-2 text-gray-700">Alice Smith scheduled an interview for UX Designer</li>
-              <li class="py-2 text-gray-700">Michael Johnson submitted feedback for Backend Developer</li>
               <li class="py-2 text-gray-700">Emily Davis was referred for Data Analyst role</li>
             </ul>
           </div>
@@ -57,4 +57,32 @@
       
       
 </body>
+
+<script src="/socket.io/socket.io.js"></script>
+<!-- <script>
+  const socket = io();
+
+  socket.on("connect", () => {
+    console.log("✅ Connected to WebSocket server");
+  });
+
+  socket.on("disconnect", () => {
+    console.log("❌ Disconnected from WebSocket server");
+  });
+</script> -->
+<script>
+  const socket = io();
+  socket.on("connect", () => {
+    console.log("✅ Connected to WebSocket server");
+    socket.emit("test-message", "Hello from client!");
+  });
+  socket.on("new-activity", (activity) => {
+    const activityList = document.querySelector(".recent-activity-list");
+    const listItem = document.createElement("li");
+    listItem.className = "py-2 text-gray-700";
+    listItem.textContent = activity.message;
+
+    activityList.prepend(listItem);
+  });
+</script>
 </html>

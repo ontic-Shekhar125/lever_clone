@@ -7,6 +7,7 @@ const path = require("path");
 const Employee = require(path.join(__dirname, "../models/Employee")); // Ensure correct path
 const Candidate = require(path.join(__dirname, "../models/candidate")); // Ensure correct path
 const referrer_id = "67bf5971d24618e1f498ada5";
+const { logActivity} = require(path.join(__dirname, "../socketFunctions"));
 
 router.post("/", async (req, res) => {
   try {
@@ -35,7 +36,8 @@ router.post("/", async (req, res) => {
       referred_jobs: jobsArray,
       referred_by: referrer_id, // Assign referrer ID
     });
-
+    console.log(typeof logActivity);
+    await logActivity(`${name} was referred for ${jobsArray}`);
     await newCandidate.save();
 
     // Redirect the user to the /emjobs page
@@ -59,6 +61,5 @@ router.get("/", (req, res) => {
     jobdata: undefined,
   });
 });
-
 
 module.exports = router;

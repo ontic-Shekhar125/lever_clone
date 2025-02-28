@@ -1,11 +1,33 @@
 const express = require("express");
 const app = express();
-const port = 3000;
 const path = require("path");
+const http = require("http"); // HTTP module
+const socketIo = require("socket.io"); // Socket.IO
+
+const server = http.createServer(app); // Attach Express to HTTP server
+const io = socketIo(server, {
+  cors: {
+    origin: "*", // Allow all origins (update this for production)
+    methods: ["GET", "POST"],
+  },
+});
+io.on("connection", (socket) => {
+  console.log("A user connected");
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
+  });
+});
+
+const { initLogger } = require("./socketFunctions"); // Import initLogger
+initLogger(io); // Initialize io in activityLogger.js
+const port = 3000;
+
 const mongoose = require("mongoose");
 
 app.use(express.json()); //
 app.use(express.urlencoded({ extended: true }));
+
 const Employee = require(path.join(__dirname, "./models/Employee")); // Ensure correct path
 const Job = require(path.join(__dirname, "./models/jobs"));
 const Interview = require(path.join(__dirname, "./models/interview"));
@@ -37,11 +59,12 @@ const feedbackRouter = require(path.join(__dirname, "./routes/feedbackRoutes"));
 
 const homepageRouter = require(path.join(__dirname, "./routes/homepageRoutes"));
 function getjobheaders() {
-  const excludes = ["_id", "__v"];
+  const excludes = ["_id", "__v","admin"];
   return Object.keys(Job.schema.paths).filter(
     (item) => !excludes.includes(item)
   );
 }
+
 
 app.set("view engine", "ejs");
 
@@ -74,6 +97,7 @@ mongoose
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/index.html"));
 });
+
 app.get("/adhomepage", async (req, res) => {
   const currentTimeUTC = new Date();
   const alljobs = await Job.find({});
@@ -159,7 +183,7 @@ app.post("/editjobs/:id", async (req, res) => {
 });
 
 app.get("/createjob", async (req, res) => {
-  const excludes = ["_id", "__v"];
+  const excludes = ["_id", "__v","admin"];
   const headers = Object.keys(Job.schema.paths).filter(
     (item) => !excludes.includes(item)
   );
@@ -168,10 +192,11 @@ app.get("/createjob", async (req, res) => {
 
 app.post("/createjob", async (req, res) => {
   try {
-    const { admin, role, department, locationType, workType, location } =
+    const { role, department, locationType, workType, location } =
       req.body;
 
     // Validate required fields
+    const admin="John Doe";
     if (
       !admin ||
       !role ||
@@ -194,8 +219,12 @@ app.post("/createjob", async (req, res) => {
     });
 
     await newJob.save();
-    res.status(201).json({ message: "Job created successfully", job: newJob });
-  } catch (error) {
+    res.send(`
+      <script>
+          alert("Job created successfully!");
+          window.location.href = "/adjobs";
+      </script>
+    `);  } catch (error) {
     console.error("Error creating job:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -472,6 +501,7 @@ app.post("/feedback/:id", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
 });
+//module.exports = { app, server, logActivity }; // Export logActivity

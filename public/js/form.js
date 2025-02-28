@@ -2,6 +2,12 @@ const headerHash = new Map([
   ["technicalScore", "Technical Score"],
   ["behavioralScore", "Behavioral Score"],
   ["additionalFeedback", "Additional Feedback"],
+  ["admin", "Admin"],
+["role","Job role"],
+["google_meet_link","Google Meet link"],
+["department","Department"],
+["location","Location"],
+
 ]);
 
 function getOptionsName(candidates) {
@@ -154,13 +160,14 @@ class wholeForm extends HTMLElement {
     const interview = JSON.parse(this.getAttribute("data-interview"));
     const optionsObj = JSON.parse(this.getAttribute("data-optionsObj"));
     const fixedflag = +this.getAttribute("data-fixedflag");
+    const buttonText= this.getAttribute("data-buttonText");
     this.innerHTML = `
             <form method="POST" class="formclass"></form>
         `;
     const data = JSON.parse(this.getAttribute("data-insert"));
     const extradata = JSON.parse(this.getAttribute("data-extradata"));
     console.log(extradata);
-    this.createform(headers, interview, extradata, optionsObj, data, fixedflag);
+    this.createform(headers, interview, extradata, optionsObj, data, fixedflag,buttonText);
 
     document.addEventListener("DOMContentLoaded", () => {
       if (data && !fixedflag) {
@@ -168,11 +175,12 @@ class wholeForm extends HTMLElement {
       }
     });
   }
-  insertbutton(form) {
+  insertbutton(form,text) {
     const btn = document.createElement("form-button");
+    btn.setAttribute("data-text",text);
     form.appendChild(btn);
   }
-  createform(headers, interview, extradata, optionsObj, data, fixedflag) {
+  createform(headers, interview, extradata, optionsObj, data, fixedflag,buttonText) {
     const form = document.querySelector(".formclass");
     headers.forEach((header) => {
       if (formConfig[header] && formConfig[header].formatter) {
@@ -207,7 +215,7 @@ class wholeForm extends HTMLElement {
       }
     });
     if(!fixedflag)
-    this.insertbutton(form);
+    this.insertbutton(form,buttonText);
   }
   populateForm(data) {
     for (let key in data) {
