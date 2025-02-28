@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Completed Interviews</title>
-  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-  <script src="/js/tableHeader.js" defer></script> <!-- Link to your custom elements JS file -->
-  <script src="/js/tableColumn.js" defer></script> <!-- Link to your custom elements JS file -->
-  <script src="/js/tableElement.js" defer></script> <!-- Link to your custom elements JS file -->
-  <script src="/js/heading.js" defer></script> <!-- Link to your custom elements JS file -->
-  <script src="/js/navbar.js" defer></script> 
-  <script src="/js/navElement.js" defer></script> 
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Completed Interviews</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="/js/tableHeader.js" defer></script>
+    <!-- Link to your custom elements JS file -->
+    <script src="/js/tableColumn.js" defer></script>
+    <!-- Link to your custom elements JS file -->
+    <script src="/js/tableElement.js" defer></script>
+    <!-- Link to your custom elements JS file -->
+    <script src="/js/heading.js" defer></script>
+    <!-- Link to your custom elements JS file -->
+    <script src="/js/navbar.js" defer></script>
+    <script src="/js/navElement.js" defer></script>
+  </head>
+  <body>
+    <custom-nav data-flag="<%- flag %>" data-index="<%- index %>"></custom-nav>
 
-
-</head>
-<body>
-  <custom-nav data-flag='<%- flag %>' data-index='<%- index %>'></custom-nav>
-
-  <div class="mt-8 mr-48 ml-48 flex-col items-center">
-    <custom-heading data-value="Completed Interviews"></custom-heading>
-    
-
-
-    <custom-table data-insert='<%- JSON.stringify(data) %>' data-headers='<%- JSON.stringify(headers) %>'></custom-table>
-  </div>
-
-</body>
+    <div class="mt-8 mr-40 ml-40 flex-col items-center">
+      <custom-heading data-value="Completed Interviews"></custom-heading>
+      <custom-table
+        data-insert="<%- JSON.stringify(data) %>"
+        data-headers="<%- JSON.stringify(headers) %>"
+      ></custom-table>
+    </div>
+  </body>
 </html>
